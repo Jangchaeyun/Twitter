@@ -7,6 +7,17 @@ import {useState, useRef} from "react";
 // const Picker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 import { Picker } from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
+import { db, storage } from "../firebase";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from "@firebase/firestore";
+import { getDownloadURL, ref, uploadString } from "@firebase/storage";
+import { async } from "@firebase/util";
+import { DownloadIcon } from "@heroicons/react/solid";
 
 function input() {
     const [input, setInput] = useState("");
@@ -15,12 +26,46 @@ function input() {
     const [loading, setLoading] = useState(false)
     const filePickerRef = useRef(null);
 
-    const sendPost = () => {
+    const sendPost = async () => {
         if(loading) return;
         setLoading(true);
-    }
 
-    const addImageToPost = () => {};
+        const docRef = await addDoc(collection(db, "posts"), {
+            id: session.user.uid,
+            username:session.user.name,
+            userImg: session.user.image,
+            tag: session.user.tag,
+            text: input,
+            timestamp: serverTimestamp(),
+        });
+
+        const imageRef = ref(storage, `posts/${docRef.id}/image`);
+
+        if (selectedFile) {
+            await uploadString(imageRef,selectedFile,"data_url").then(async () => {
+                const getDownloadURL = await getDownloadURL(imageRef)
+                await updateDoc(doc(db,"posts", docRef.id){
+                    image: getDownloadURL,
+                });
+            });
+        }
+
+        setLoading(false);
+        setInput("");
+        setSeletedFile(null);
+        setShowEmojis(false);
+    };
+
+    const addImageToPost = (e) => {
+        const reader = new FileReader();
+        if (e.target.files[0]) {
+            reader.readAsDataURL(e.target.files[0]);
+        }
+
+        reader.onload = (readerEvent) => {
+            setSeletedFile(readerEvent.target.result)
+        };
+    };
 
     const addEmoji = (e) => {
         let sym = e.unified.split("-");

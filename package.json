@@ -10,6 +10,7 @@
     "@emoji-mart/react": "^1.0.1",
     "@heroicons/react": "v1",
     "emoji-mart": "3.0.1",
+    "firebase": "^9.10.0",
     "next": "latest",
     "react": "18.1.0",
     "react-dom": "18.1.0"
