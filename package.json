@@ -6,7 +6,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@emoji-mart/data": "^1.0.6",
+    "@emoji-mart/react": "^1.0.1",
     "@heroicons/react": "v1",
+    "emoji-mart": "3.0.1",
     "next": "latest",
     "react": "18.1.0",
     "react-dom": "18.1.0"
@@ -19,5 +22,11 @@
     "postcss": "^8.4.14",
     "tailwindcss": "^3.1.2",
     "typescript": "4.7.2"
-  }
+  },
+  "name": "twitter",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Jangchaeyun/twitter.git",
+  "author": "zzangsally <62280276+Jangchaeyun@users.noreply.github.com>",
+  "license": "MIT"
 }
